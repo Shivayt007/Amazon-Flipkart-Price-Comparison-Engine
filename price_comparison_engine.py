@@ -5,9 +5,9 @@ from difflib import get_close_matches
 import webbrowser
 from collections import defaultdict
 import random
-
+from tkinter import messagebox
 root = Tk()
-root.geometry("320x150")
+root.geometry("620x250")
 
 class Price_compare:
 
@@ -183,6 +183,7 @@ class Price_compare:
             self.var_amzn.set(self.looktable[self.matches_amzn[0]][0] + '.00')
             self.product_link = self.looktable[self.matches_amzn[0]][1]
         except Exception as err:
+            messagebox.showinfo("No Products Available", "Try With other products")
             print("No Products Available")
 
     def search(self):

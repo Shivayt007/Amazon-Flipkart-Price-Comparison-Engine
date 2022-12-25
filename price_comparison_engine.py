@@ -1,5 +1,3 @@
-
-
 from tkinter import *
 from bs4 import BeautifulSoup
 import requests
@@ -78,28 +76,29 @@ class Price_compare:
             self.variable_flip.set(self.matches_flip[0])
         except:
             self.variable_flip.set('Product not available')
+        try:
+            option_amzn = OptionMenu(self.window, self.variable_amzn, *self.matches_amzn)
+            option_amzn.grid(row=3, column=1, sticky=W)
 
-        option_amzn = OptionMenu(self.window, self.variable_amzn, *self.matches_amzn)
-        option_amzn.grid(row=3, column=1, sticky=W)
+            lab_amz = Label(self.window, text='Not this? Try out suggestions by clicking on the title')
+            lab_amz.grid(row=3, column=2, padx=4)
 
-        lab_amz = Label(self.window, text='Not this? Try out suggestions by clicking on the title')
-        lab_amz.grid(row=3, column=2, padx=4)
+            option_flip = OptionMenu(self.window, self.variable_flip, *self.matches_flip)
+            option_flip.grid(row=0, column=1, sticky=W)
 
-        option_flip = OptionMenu(self.window, self.variable_flip, *self.matches_flip)
-        option_flip.grid(row=0, column=1, sticky=W)
+            lab_flip = Label(self.window, text='Not this? Try out suggestions by clicking on the title')
+            lab_flip.grid(row=0, column=2, padx=4)
 
-        lab_flip = Label(self.window, text='Not this? Try out suggestions by clicking on the title')
-        lab_flip.grid(row=0, column=2, padx=4)
+            button_search = Button(self.window, text='Search', command=self.search, bd=4)
+            button_search.grid(row=2, column=2, sticky=E, padx=10, pady=4)
 
-        button_search = Button(self.window, text='Search', command=self.search, bd=4)
-        button_search.grid(row=2, column=2, sticky=E, padx=10, pady=4)
+            button_amzn_visit = Button(self.window, text='Visit Site', command=self.visit_amzn, bd=4)
+            button_amzn_visit.grid(row=4, column=2, sticky=W)
 
-        button_amzn_visit = Button(self.window, text='Visit Site', command=self.visit_amzn, bd=4)
-        button_amzn_visit.grid(row=4, column=2, sticky=W)
-
-        button_flip_visit = Button(self.window, text='Visit Site', command=self.visit_flip, bd=4)
-        button_flip_visit.grid(row=1, column=2, sticky=W)
-
+            button_flip_visit = Button(self.window, text='Visit Site', command=self.visit_flip, bd=4)
+            button_flip_visit.grid(row=1, column=2, sticky=W)
+        except Exception as err:
+            print("No Products Available")        
     def price_flipkart(self, key):
         url_flip = 'https://www.flipkart.com/search?q=' + str(
             key) + '&marketplace=FLIPKART&otracker=start&as-show=on&as=off'
@@ -179,9 +178,12 @@ class Price_compare:
         self.looktable = {}
         for title in self.matches_amzn:
             self.looktable[title] = map[title]
-        self.opt_title.set(self.matches_amzn[0])
-        self.var_amzn.set(self.looktable[self.matches_amzn[0]][0] + '.00')
-        self.product_link = self.looktable[self.matches_amzn[0]][1]
+        try:
+            self.opt_title.set(self.matches_amzn[0])
+            self.var_amzn.set(self.looktable[self.matches_amzn[0]][0] + '.00')
+            self.product_link = self.looktable[self.matches_amzn[0]][1]
+        except Exception as err:
+            print("No Products Available")
 
     def search(self):
         amzn_get = self.variable_amzn.get()
